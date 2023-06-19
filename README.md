@@ -3,7 +3,7 @@
 <b>Free UAS untuk mata kuliah data mining</b>
 
 - Requirements : Python (.py) untuk bahasa pemrograman dan Streamlit untuk deploy aplikasi.
-- Berikut merupakan beberapa fitur aplikasi pendeteksi diabetes.
+- Berikut merupakan beberapa fitur aplikasi prediksi diabetes.
 - Fitur 1 : Input data. Ketika program dijalankan, pada halaman awal user dapat menginputkan data perihal nilai K, level glukosa, level insulin, nilai BMI dan umur.
 
 <img width="1280" alt="Screen Shot 2023-06-19 at 20 42 34" src="https://github.com/FidelaAzzahra/aplikasi_deteksi_diabetes/assets/114632917/7e579f35-9316-4643-af51-c94890ce8353">
