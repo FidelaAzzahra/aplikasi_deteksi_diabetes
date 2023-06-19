@@ -25,7 +25,7 @@ def main():
     user_age = st.number_input('Masukkan umur', value=30)
 
 
-    user_data = [user_glucose, user_insulin, user_bmi, user_age] # membuat variabel user_data yang isinya user_glucose, user_insulin yang akan di input oleh pengguna
+    user_data = [user_glucose, user_insulin, user_bmi, user_age] # membuat variabel user_data yang isinya user_glucose, user_insulin, user_bmi, user_age yang akan di input oleh pengguna
     data_arr = [] # untuk menyimpan data dari glucose, insulin, dll
     dist_arr = [] # untuk menyimpan jarak antar data pengguna dengan dataset
 
@@ -37,7 +37,7 @@ def main():
             for j in ['Glucose', 'Insulin', 'BMI', 'Age']: # data glucose, dll akan dimasukkan kedalam data_arr
                 elem = data[j][i]
                 data_arr.append(elem)
-            #  jarak antara data pengguna dengan data pada dataset dihitung menggunakan Euclidean distance dan disimpan dalam dist_arr
+            #  jarak antara data pengguna dengan data pada dataset dihitung menggunakan euclidean distance dan disimpan dalam dist_arr
             dist = ((user_data[0] - data_arr[0]) ** 2 + (user_data[1] - data_arr[1]) ** 2 +
                     (user_data[2] - data_arr[2]) ** 2 + (user_data[3] - data_arr[3]) ** 2) ** 0.5
             dist_arr.append(dist)
