@@ -11,7 +11,7 @@ import matplotlib.ticker as ticker # library untuk mengatur penanda sumbu plot
 
 # def main merupakan fungsi main. Penanda titik utama program dijalankan
 def main():
-    st.title('Prediksi Diabetes dengan KNN') # untuk judul
+    st.title('Prediksi Diabetes Dengan KNN') # untuk judul
     st.subheader('')
 
     data = pd.read_csv('diabetes.csv') # Membaca dataset diabetes dari file CSV dengan menggunakan fungsi read_csv dari pandas. Dataset akan disimpan dalam variabel data.
