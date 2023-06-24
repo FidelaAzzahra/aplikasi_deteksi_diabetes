@@ -58,14 +58,9 @@ def main():
         st.subheader('')
         st.subheader('Hasil Prediksi')
 
-        # inisialisasi untuk menghitung jumlah prediksi dengan nilai 0 (tidak mengidap diabetes) 
-        # dan nilai 1 (mengidap diabetes) pada variabel user_prediction.
-        one_count = (user_prediction == 1).sum()
-        zero_count = (user_prediction == 0).sum()
-
-        if zero_count > one_count: # jika 0 > 1 maka pengguna tidak menderita 
+        if user_prediction == 0: # jika 0 maka tidak mengidap diabetes
             st.success('Berdasarkan dataset yang diberikan, pengguna diprediksi TIDAK MENGIDAP DIABETES dengan tingkat akurasi sebesar {:.2f}%'.format(accuracy_score(y_test, knn.predict(X_test)) * 100))
-        else: # sebaliknya menderita
+        else: # selain itu mengidap
             st.error('Berdasarkan dataset yang diberikan, pengguna diprediksi MENGIDAP DIABETES dengan tingkat akurasi sebesar {:.2f}%'.format(accuracy_score(y_test, knn.predict(X_test)) * 100))
 
         st.subheader('')
@@ -74,7 +69,7 @@ def main():
         fig, ax = plt.subplots(figsize=(12, 9)) # mengatur ukuran dari heatmap 
         
         # memilih kolom yang relevan berdasarkan hasil prediksi untuk heatmap
-        if zero_count > one_count: # data komplit ditampilkan jika pengguna tidak mengidap diabetes
+        if user_prediction == 0: # data komplit ditampilkan jika pengguna tidak mengidap diabetes
             selected_columns = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']
         else: # data yang ditampilkan kurang jika pengguna mengidap diabetes
             selected_columns = ['Glucose', 'BloodPressure', 'SkinThickness', 'BMI', 'Age']
