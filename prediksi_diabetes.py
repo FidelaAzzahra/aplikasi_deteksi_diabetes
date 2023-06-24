@@ -3,90 +3,87 @@
 # Salsabila Ayu Anjelina
 # Salma Shafira Fatya Ardyani
 
-import streamlit as st # import library streamlit
+import streamlit as st # library untuk import streamlit nya
 import pandas as pd # library untuk membaca dataset dan analisis datanya
 import seaborn as sns # library untuk visualisasi data dan membuat heatmap
 import matplotlib.pyplot as plt # library untuk visualisasi data
 import matplotlib.ticker as ticker # library untuk mengatur penanda sumbu plot
+from sklearn.neighbors import KNeighborsClassifier # library scikit-learn yang digunakan untuk mengimplementasikan algoritma K-Nearest Neighbors (KNN)
+from sklearn.model_selection import train_test_split # fungsi dalam library scikit-learn yang digunakan untuk membagi dataset menjadi subset train dan test secara acak
+from sklearn.preprocessing import StandardScaler # kelas dalam library scikit-learn yang digunakan untuk melakukan penskalaan fitur pada dataset
 
 # def main merupakan fungsi main. Penanda titik utama program dijalankan
 def main():
-    st.title('Prediksi Diabetes Dengan KNN') # untuk judul
+    st.title('Prediksi Diabetes dengan KNN')
     st.subheader('')
 
-    data = pd.read_csv('diabetes.csv') # Membaca dataset diabetes dari file CSV dengan menggunakan fungsi read_csv dari pandas. Dataset akan disimpan dalam variabel data.
+    # Membaca dataset diabetes dari file CSV dengan menggunakan fungsi read_csv dari pandas. Dataset akan disimpan dalam variabel data.
+    data = pd.read_csv('diabetes.csv')
 
-
-    # Pengguna diminta untuk memasukkan nilai k, level glucose, insulin, bmi, dan umur
+    # pada baris kode ini user diminta untuk memasukkan data
     k = st.number_input('Masukkan nilai dari K', value=5, step=1)
     user_glucose = st.number_input('Masukkan level glukosa', value=60)
     user_insulin = st.number_input('Masukkan level insulin', value=35)
     user_bmi = st.number_input('Masukkan nilai BMI', value=25.0)
     user_age = st.number_input('Masukkan umur', value=30)
 
+    # membuat variabel user_data yang isinya user_glucose, user_insulin, user_bmi, user_age yang akan di input oleh pengguna
+    user_data = [[user_glucose, user_insulin, user_bmi, user_age]] 
+    X = data[['Glucose', 'Insulin', 'BMI', 'Age']] # X digunakan untuk menyimpan data dari glucose, insulin, dll
+    y = data['Outcome'] # y digunakan untuk menyimpan data Outcome
 
-    user_data = [user_glucose, user_insulin, user_bmi, user_age] # membuat variabel user_data yang isinya user_glucose, user_insulin, user_bmi, user_age yang akan di input oleh pengguna
-    data_arr = [] # untuk menyimpan data dari glucose, insulin, dll
-    dist_arr = [] # untuk menyimpan jarak antar data pengguna dengan dataset
+    # preprocessing
+    scaler = StandardScaler()  # Membuat objek scaler dari kelas StandardScaler
+    X_scaled = scaler.fit_transform(X)  # Menyimpan data X yang telah diubah skala menggunakan scaler
+    user_data_scaled = scaler.transform(user_data)  # Mengubah skala data pengguna (user_data) menggunakan scaler yang sama
 
+    # dataset di split dengan menggunakan train test split
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
-    if st.button('Cek Kesehatan'): # kalau prediksi ditekan
+    if st.button('Cek Kesehatan'): # ketika button cek kesehatan ditekan
         st.subheader('')
         st.subheader('')
-        for i in range(len(data)): #  perulangan for akan dilakukan sebanyak jumlah data dalam dataset.
-            for j in ['Glucose', 'Insulin', 'BMI', 'Age']: # data glucose, dll akan dimasukkan kedalam data_arr
-                elem = data[j][i]
-                data_arr.append(elem)
-            #  jarak antara data pengguna dengan data pada dataset dihitung menggunakan euclidean distance dan disimpan dalam dist_arr
-            dist = ((user_data[0] - data_arr[0]) ** 2 + (user_data[1] - data_arr[1]) ** 2 +
-                    (user_data[2] - data_arr[2]) ** 2 + (user_data[3] - data_arr[3]) ** 2) ** 0.5
-            dist_arr.append(dist)
-            data_arr = [] # data akan dikosongkan untuk perhitungan selanjutnya
-            
 
-        result = pd.DataFrame(dist_arr, columns=['Distance']) # untuk pembentukan data frame baru dengan menggunakan dist_arr sebagai kolom distance.
-        
-        # kemudian menambahkan kolom glucose, insulin, bmi, umur dari dataset kedalam result
-        result['Glucose'] = data['Glucose']
-        result['Insulin'] = data['Insulin']
-        result['BMI'] = data['BMI']
-        result['Age'] = data['Age']
-        result['Diabetes'] = data['Outcome']
+        # model untuk KNN
+        knn = KNeighborsClassifier(n_neighbors=k)  # Membuat objek KNeighborsClassifier dengan jumlah tetangga k yang ditentukan
+        knn.fit(X_train, y_train)  # Melatih model KNN menggunakan data latih X_train dan label y_train
 
+        # untuk memprediksi status kesehatan dari user
+        user_prediction = knn.predict(user_data_scaled)  # Memprediksi status kesehatan pengguna menggunakan data pengguna yang telah diubah skala
 
-        # mengambil K baris terkecil dari data frame result berdasarkan kolom distance dengan fungsi nsmallest dari library pandas. Untuk hasil disimpan di result_smallest
-        result_smallest = result.nsmallest(k, 'Distance')
-
-
-        # untuk menampilkan pesan hasil prediksi diabetes
-        # Jika nilai result_smallest > 0 = mengidap diabetes
-        # selain itu = tidak mengidap diabetes
         st.subheader('')
-        st.subheader('Hasil Prediksi')
-        if result_smallest['Diabetes'].sum() > 0:
+        st.subheader('Hasil Prediksi') 
+        if user_prediction[0] == 1: # melakukan pengecekan. Kalau 1 berarti mendertia. Kalau 0 tidak
             st.error('Berdasarkan dataset yang diberikan, pengguna diprediksi MENGIDAP DIABETES')
         else:
             st.success('Berdasarkan dataset yang diberikan, pengguna diprediksi TIDAK MENGIDAP DIABETES')
-        
-        
-        st.subheader('')
-        st.subheader('')
-        st.subheader('Data Terdekat') # tampilkan judul data terdekat
-        st.table(result_smallest[['Glucose', 'Insulin', 'BMI', 'Age', 'Diabetes']]) # untuk menampilkan keterangan pengguna serta data yang diambil dari nilai K untuk glucose, insulin, dan hasil diabetes (1 atau 0)
-        st.subheader('')
-        
 
-        st.subheader('Heatmap Prediksi Diabetes') # untuk menampilkan heatmap / peta panas
-        fig, ax = plt.subplots(figsize=(8, 6))
-        heatmap = sns.heatmap(result_smallest[['Glucose', 'Insulin', 'BMI', 'Age']].corr(), annot=True,
-                              cmap='coolwarm', linewidths=0.5, ax=ax)
-        heatmap.xaxis.set_major_locator(ticker.IndexLocator(base=1, offset=0.5))
-        heatmap.yaxis.set_major_locator(ticker.IndexLocator(base=1, offset=0.5))
-        plt.xticks(rotation=45)
-        plt.yticks(rotation=0)
-        st.pyplot(fig) # menampilkan heatmap menggunakan st.pyplot() 
-
+        st.subheader('')
+        st.subheader('')
+        st.subheader('Data Terdekat')
+        # menampilkan tabel yang berisi data terdekat dengan data pengguna berdasarkan metode KNN.
+        # data terdekat diambil dari data menggunakan indeks yang dihasilkan dari knn.kneighbors(user_data_scaled, return_distance=False).flatten().
         
-# memanggil fungsi main jika program dijalankan / run
+        st.table(data.loc[knn.kneighbors(user_data_scaled, return_distance=False).flatten()][['Glucose', 'Insulin', 'BMI', 'Age', 'Outcome']])
+        st.subheader('')
+
+        st.subheader('Heatmap Prediksi Diabetes')
+        fig, ax = plt.subplots(figsize=(8, 6)) # Membuat objek gambar (fig) dan objek sumbu (ax) dengan ukuran (8, 6) dalam satuan inci.
+        # Membuat heatmap menggunakan sns.heatmap.
+        # data yang digunakan adalah data terdekat dengan data pengguna berdasarkan metode KNN.
+        # hanya kolom 'Glucose', 'Insulin', 'BMI', dan 'Age' yang digunakan.
+        # corr() digunakan untuk menghitung korelasi antara kolom-kolom tersebut.
+        # annot = True mengaktifkan anotasi nilai pada heatmap.
+        # cmap = 'coolwarm' menentukan skema warna untuk heatmap.
+        # linewidths=0.5 menentukan ketebalan garis antar sel pada heatmap.
+        # ax=ax mengarahkan heatmap untuk digambar pada sumbu yang telah dibuat sebelumnya.
+        heatmap = sns.heatmap(data.loc[knn.kneighbors(user_data_scaled, return_distance=False).flatten()][['Glucose', 'Insulin', 'BMI', 'Age']].corr(), annot=True, cmap='coolwarm', linewidths=0.5, ax=ax)
+        heatmap.xaxis.set_major_locator(ticker.IndexLocator(base=1, offset=0.5)) # menentukan penempatan penanda sumbu x pada setiap label kolom.
+        heatmap.yaxis.set_major_locator(ticker.IndexLocator(base=1, offset=0.5)) # menentukan penempatan penanda sumbu y pada setiap label baris.
+        plt.xticks(rotation=45) # memutar label sumbu x sebesar 45 derajat.
+        plt.yticks(rotation=0) # sumbu y tidak diputar / tetap
+        st.pyplot(fig) # Menampilkan gambar (heatmap) dalam antarmuka aplikasi Streamlit menggunakan fungsi st.pyplot.
+
+
 if __name__ == '__main__':
     main()
