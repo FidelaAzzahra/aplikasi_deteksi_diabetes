@@ -92,7 +92,7 @@ def main():
         st.subheader('Pohon Keputusan')
         dt = tree.DecisionTreeClassifier()
         dt.fit(X_train[:, [X.columns.get_loc(col) for col in selected_columns]], y_train)
-        plt.figure(figsize=(15, 9))
+        plt.figure(figsize=(12, 9))
         # Jika pengguna diprediksi tidak mengidap diabetes, maka semua kolom akan dipilih. 
         # Jika pengguna diprediksi mengidap diabetes, maka hanya kolom yang relevan yang akan dipilih.
         tree.plot_tree(dt, feature_names=selected_columns, class_names=['Tidak Diabetes', 'Diabetes'], filled=True)
