@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier # library scikit-learn yang d
 from sklearn.model_selection import train_test_split # fungsi dalam library scikit-learn yang digunakan untuk membagi dataset menjadi subset train dan test secara acak
 from sklearn.preprocessing import StandardScaler # kelas dalam library scikit-learn yang digunakan untuk melakukan penskalaan fitur pada dataset
 from sklearn.metrics import accuracy_score #  metrics digunakan untuk menghitung nilai akursi
-from sklearn import tree
+
 
 # def main merupakan fungsi main. Penanda titik utama program dijalankan
 def main():
@@ -81,17 +81,6 @@ def main():
         plt.yticks(rotation=0)
         st.pyplot(fig) # menampilkan gambar (heatmap) dalam antarmuka aplikasi Streamlit menggunakan fungsi st.pyplot.
         
-        # Menampilkan pohon keputusan
-        st.subheader('')
-        st.subheader('')
-        st.subheader('Pohon Keputusan')
-        dt = tree.DecisionTreeClassifier()
-        dt.fit(X_train[:, [X.columns.get_loc(col) for col in selected_columns]], y_train)
-        plt.figure(figsize=(15, 9))
-        # Jika pengguna diprediksi tidak mengidap diabetes, maka semua kolom akan dipilih. 
-        # Jika pengguna diprediksi mengidap diabetes, maka hanya kolom yang relevan yang akan dipilih.
-        tree.plot_tree(dt, feature_names=selected_columns, class_names=['Tidak Diabetes', 'Diabetes'], filled=True)
-        st.pyplot(plt) # menampilkan pohon keputusan
     
 if __name__ == '__main__':
     main()
