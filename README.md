@@ -10,9 +10,8 @@
 
 <img width="1280" alt="Screen Shot 2023-06-24 at 16 09 57" src="https://github.com/FidelaAzzahra/aplikasi_deteksi_diabetes/assets/114632917/c4a130e7-7ae1-4a31-ae17-89872a99dbe5">
 
-- Fitur 2 : Cek kesehatan. Apabila data sudah terinput, user dapat menekan button Cek Kesehatan yang nantinya akan menghasilkan hasil yang berupa Hasil Prediksi, Heatmap, beserta visualisasi dalam model berupa pohon keputusan
+- Fitur 2 : Cek kesehatan. Apabila data sudah terinput, user dapat menekan button Cek Kesehatan yang nantinya akan menghasilkan hasil yang berupa Hasil Prediksi dan Heatmap
 
 <img width="1280" alt="Screen Shot 2023-06-24 at 16 10 05" src="https://github.com/FidelaAzzahra/aplikasi_deteksi_diabetes/assets/114632917/f0df5adc-9ef4-457f-966b-a2e734b9c029">
 
-<img width="1280" alt="Screen Shot 2023-06-24 at 16 10 13" src="https://github.com/FidelaAzzahra/aplikasi_deteksi_diabetes/assets/114632917/04cdd18e-3bbc-47f8-a240-f0834b86295a">
 
